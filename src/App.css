@@ -1,6 +1,16 @@
 .App {
   text-align: center;
 }
+.movie-img{
+  height: 350px;
+  width: 250px;
+  margin: 10px;
+}
+.movie{
+  width: 100%;
+  margin: 10px;
+  display: flex;
+}
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
@@ -9,7 +19,7 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
