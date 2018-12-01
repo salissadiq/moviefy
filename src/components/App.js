@@ -35,7 +35,7 @@ class App extends Component {
       this.searchMovie()
   }
   searchMovie(){
-      fetch(`http://www.omdbapi.com/?s=${this.state.search}&apikey=4a3b711b`)
+      fetch(`https://www.omdbapi.com/?s=${this.state.search}&apikey=4a3b711b`)
           .then(res=> res.json())
           .then(jsonres=>
           {
