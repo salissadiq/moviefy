@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import "../App.css";
 import Header from "./Header";
 import Movie from "./Movie";
-
+import Search from './Search';
+import spinner from './loading.gif';
 /*
   ------- STATE -------
   What is state in a React app? You can think of it as a single JavaScript object which represents all the data in your app.
@@ -18,80 +19,50 @@ import Movie from "./Movie";
   }
 */
 
+const MOVIE_API_URL = '';
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      movies: [
-        {
-          title: "Ferris Bueller's Day Off",
-          year: "1986",
-          description:
-            "A high school wise guy is determined to have a day off from school, despite what the principal thinks of that.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Bridget Jones' Diary",
-          year: "2001",
-          description:
-            "A British woman is determined to improve herself while she looks for love in a year in which she keeps a personal diary.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Bridget Jones' Diary",
-          year: "2001",
-          description:
-            "A British woman is determined to improve herself while she looks for love in a year in which she keeps a personal diary.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Bridget Jones' Diary",
-          year: "2001",
-          description:
-            "A British woman is determined to improve herself while she looks for love in a year in which she keeps a personal diary.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Bridget Jones' Diary",
-          year: "2001",
-          description:
-            "A British woman is determined to improve herself while she looks for love in a year in which she keeps a personal diary.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "50 First Dates",
-          year: "2004",
-          description:
-            "Henry Roth is a man afraid of commitment up until he meets the beautiful Lucy. They hit it off and Henry think he's finally found the girl of his dreams.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        },
-        {
-          title: "Matilda",
-          year: "1996",
-          description:
-            "Story of a wonderful little girl, who happens to be a genius, and her wonderful teacher vs. the worst parents ever and the worst school principal imaginable.",
-          poster:
-            "https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_SX300.jpg"
-        }
-      ]
+      movies: [],
+        loading: true,
+        search: 'man'
+
     };
   }
 
+  componentDidMount(){
+      this.searchMovie()
+  }
+  searchMovie(){
+      fetch(`http://www.omdbapi.com/?s=${this.state.search}&apikey=4a3b711b`)
+          .then(res=> res.json())
+          .then(jsonres=>
+          {
+              // console.log(jsonres);
+              this.setState(
+                  {
+                      movies: jsonres.Search || [],
+                      loading: false
+                  })
+          })
+          .catch(error => {console.log(error)})
+  }
+  submitSearch = (value)=>{
+      this.setState({search: value, loading:true},()=>{
+          this.searchMovie()
+      });
+  };
   render() {
     return (
       <div className="App">
-        <Header text="Samuel's Movie App" />
+        <Header text="MOVIEFY" />
         <p className="App-intro">Sharing a few of our favourite movies</p>
+          <Search submit={this.submitSearch}/>
         <div className="movies">
-          {this.state.movies.map((movie, index) => (
-            <Movie key={`${index}-${movie.title}`} meta={movie} />
-          ))}
+          {this.state.loading ? (<img src={spinner} className="spin" width="100" height="100" />) : this.state.movies.map((movie, index) => (
+              <Movie key={index} meta={movie} />
+              ))}
         </div>
       </div>
     );
