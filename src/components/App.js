@@ -39,7 +39,7 @@ class App extends Component {
           .then(res=> res.json())
           .then(jsonres=>
           {
-              // console.log(jsonres);
+              console.log(jsonres);
               this.setState(
                   {
                       movies: jsonres.Search || [],
