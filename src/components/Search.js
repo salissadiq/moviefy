@@ -10,7 +10,6 @@ class Search extends React.Component{
     setValue = event =>{
         // console.log(event)
         this.setState({value: event.target.value});
-        this.props.submit(event.target.value)
     };
     submitForm = event=>{
         this.props.submit(this.state.value);
